@@ -236,3 +236,4 @@ export class CustomWeightedCalculator implements ScoreCalculator {
 3. **Data Immutability**: Survey submissions store full snapshots of questions, selected option texts, and scores. Modifying questions later will never corrupt historical respondent records.
 # financial-readiness
 # financial-readiness
+# financial-readiness
