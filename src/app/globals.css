@@ -2,25 +2,63 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f1e3a;
+
+  /* Shree Capital Brand Palette */
+  --brand-navy: #0f1e3a;
+  --brand-navy-dark: #102a43;
+  --brand-blue: #1f5e8c;
+  --brand-slate-dark: #243b53;
+  --brand-slate: #334e68;
+  --brand-gold: #c9a44c;
+  --brand-gold-hover: #b8933b;
+  --brand-gold-light: #fdf8ee;
+  --brand-light: #f8fafc;
+  --brand-muted: #627d98;
+  --brand-border: #bcccdc;
+  --brand-subtle: #9fb3c8;
+  --brand-ice: #eef2f6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  
+  --color-brand-navy: #0f1e3a;
+  --color-brand-navy-dark: #102a43;
+  --color-brand-blue: #1f5e8c;
+  --color-brand-slate-dark: #243b53;
+  --color-brand-slate: #334e68;
+  --color-brand-gold: #c9a44c;
+  --color-brand-gold-hover: #b8933b;
+  --color-brand-gold-light: #fdf8ee;
+  --color-brand-light: #f8fafc;
+  --color-brand-muted: #627d98;
+  --color-brand-border: #bcccdc;
+  --color-brand-subtle: #9fb3c8;
+  --color-brand-ice: #eef2f6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: Georgia, "Playfair Display", "Times New Roman", Cambria, serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
+
+/* Subtle Plus/Cross Pattern for Luxury Navy Hero */
+.bg-plus-grid {
+  background-color: #0f1e3a;
+  background-image: radial-gradient(#243b53 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+}
+
+.bg-plus-cross-pattern {
+  background-color: #0f1e3a;
+  background-image: 
+    linear-gradient(to right, rgba(36, 59, 83, 0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(36, 59, 83, 0.4) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+

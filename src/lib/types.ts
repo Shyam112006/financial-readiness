@@ -33,6 +33,7 @@ export interface ISurveyResponse {
   respondent: {
     name: string;
     email: string;
+    phone?: string;
     age: number;
   };
   answers: IAnswerSnapshot[];

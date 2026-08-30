@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
     const headers = [
       'Name',
       'Email',
+      'Phone',
       'Age',
       'Submission Date',
     ];
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
       const row: (string | number | undefined)[] = [
         resp.respondent?.name || '',
         resp.respondent?.email || '',
+        resp.respondent?.phone || '',
         resp.respondent?.age || '',
         resp.submittedAt ? new Date(resp.submittedAt).toISOString() : '',
       ];

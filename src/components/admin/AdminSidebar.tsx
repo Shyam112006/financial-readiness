@@ -14,6 +14,8 @@ import {
   X,
 } from 'lucide-react';
 
+import Image from 'next/image';
+
 interface AdminSidebarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -78,23 +80,31 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-screen w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-screen w-64 bg-[#0f1e3a] text-[#bcccdc] flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 border-r border-[#243b53] ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
-          <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-base shadow-sm">
-              P
+        <div className="h-18 flex items-center justify-between px-6 border-b border-[#243b53]">
+          <Link href="/admin/dashboard" className="flex items-center gap-3">
+            <div className="bg-white px-2.5 py-1 rounded-xl shadow-xs border border-white/20 flex items-center justify-center">
+              <Image
+                src="/Logo-ShreeCapital.png"
+                alt="Shree Capital logo"
+                width={140}
+                height={50}
+                priority
+                className="h-6 w-auto object-contain"
+              />
+              <span className="sr-only">Shree Capital</span>
             </div>
-            <span className="font-bold text-white text-base tracking-tight">
-              PulseIndex <span className="text-xs text-blue-400 font-medium">Admin</span>
+            <span className="text-[11px] font-medium text-[#c9a44c] bg-[#102a43] px-2 py-0.5 rounded-full border border-[#243b53]">
+              Advisor
             </span>
           </Link>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 lg:hidden"
+            className="p-1 rounded-lg text-[#9fb3c8] hover:text-white hover:bg-[#102a43] lg:hidden"
           >
             <X className="w-5 h-5" />
           </button>
@@ -112,9 +122,9 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                   key={item.name}
                   href={item.href}
                   download
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800/80"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-[#9fb3c8] hover:text-white hover:bg-[#102a43]"
                 >
-                  <Icon className="w-5 h-5 text-slate-400" />
+                  <Icon className="w-5 h-5 text-[#9fb3c8]" />
                   <span>{item.name}</span>
                 </a>
               );
@@ -127,11 +137,11 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 onClick={() => onClose()}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
+                    ? 'bg-[#c9a44c] text-[#0f1e3a] font-semibold shadow-xs'
+                    : 'text-[#9fb3c8] hover:text-white hover:bg-[#102a43]'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'text-[#0f1e3a]' : 'text-[#9fb3c8]'}`} />
                 <span>{item.name}</span>
               </Link>
             );

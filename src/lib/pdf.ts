@@ -17,28 +17,29 @@ export interface GeneratePdfParams {
   appName?: string;
 }
 
-// ── Colour palette (premium wealth-management theme) ──────────────────────
-const NAVY       = '#0f172a';
-const NAVY_MID   = '#1e3a8a';
-const NAVY_LIGHT = '#1e293b';
-const GOLD       = '#9e7c2e';
+// ── Colour palette (exact match to Shree Capital brand hex codes) ────────
+const NAVY       = '#0f1e3a';
+const NAVY_DARK  = '#102a43';
+const NAVY_MID   = '#1f5e8c';
+const NAVY_LIGHT = '#243b53';
+const GOLD       = '#c9a44c';
 const GOLD_PALE  = '#fdf8ee';
-const GOLD_BR    = '#dab94e';
-const GREEN      = '#15803d';
-const GREEN_BG   = '#f0fdf4';
-const GREEN_BR   = '#86efac';
-const AMBER      = '#b45309';
-const AMBER_BG   = '#fffbeb';
-const AMBER_BR   = '#fcd34d';
+const GOLD_BR    = '#c9a44c';
+const GREEN      = '#1f5e8c';
+const GREEN_BG   = '#f8fafc';
+const GREEN_BR   = '#bcccdc';
+const AMBER      = '#c9a44c';
+const AMBER_BG   = '#fdf8ee';
+const AMBER_BR   = '#c9a44c';
 const WHITE      = '#ffffff';
-const OFFWHITE   = '#f9f8f5';
-const SLATE700   = '#334155';
-const SLATE600   = '#475569';
-const SLATE500   = '#64748b';
-const SLATE400   = '#94a3b8';
-const SLATE300   = '#cbd5e1';
-const SLATE200   = '#e2e8f0';
-const SLATE100   = '#f1f5f9';
+const OFFWHITE   = '#f8fafc';
+const SLATE700   = '#243b53';
+const SLATE600   = '#334e68';
+const SLATE500   = '#627d98';
+const SLATE400   = '#9fb3c8';
+const SLATE300   = '#bcccdc';
+const SLATE200   = '#bcccdc';
+const SLATE100   = '#eef2f6';
 const SLATE50    = '#f8fafc';
 
 const PAGE_W = 595.28;

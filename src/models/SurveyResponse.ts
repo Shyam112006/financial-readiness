@@ -5,6 +5,7 @@ export interface ISurveyResponseDocument extends Document {
   respondent: {
     name: string;
     email: string;
+    phone?: string;
     age: number;
   };
   answers: IAnswerSnapshot[];
@@ -65,6 +66,10 @@ const SurveyResponseSchema = new Schema<ISurveyResponseDocument>(
         trim: true,
         lowercase: true,
         index: true,
+      },
+      phone: {
+        type: String,
+        trim: true,
       },
       age: {
         type: Number,

@@ -14,6 +14,7 @@ import {
   AlertCircle,
   Clock,
   User,
+  Phone,
   ShieldCheck,
   Download,
 } from 'lucide-react';
@@ -205,6 +206,14 @@ export default function AdminResponseDetailPage({
                 Email Address
               </span>
               <p className="font-bold text-slate-900 font-mono text-xs">{response.respondent.email}</p>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
+              <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-1">
+                <Phone className="w-3.5 h-3.5 text-slate-400" />
+                Phone Number
+              </span>
+              <p className="font-bold text-slate-900 font-mono text-xs">{response.respondent.phone || 'Not provided'}</p>
             </div>
 
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">

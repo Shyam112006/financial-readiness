@@ -45,7 +45,7 @@ export interface EmailDispatchResult {
 }
 
 /**
- * Builds the official Shree Capital — Financial Ready™ HTML Email Template
+ * Builds the official Shree Capital — Financial Ready HTML Email Template
  */
 export function generateSurveyResultEmailHtml(params: SendSurveyResultEmailParams): string {
   const appUrl = process.env.APP_URL || 'http://localhost:3000';
@@ -58,25 +58,22 @@ export function generateSurveyResultEmailHtml(params: SendSurveyResultEmailParam
   const strongestScore = params.strongestDimension?.percentage !== undefined ? params.strongestDimension.percentage : 80;
   const strongestNote =
     params.strongestDimension?.note ||
-    'Your habits in this dimension provide a solid, dependable foundation.';
+    'Your habits and approach in this area provide a strong anchor for long-term growth.';
 
   const opportunityName = params.opportunityDimension?.name || 'Risk Protection';
-  const opportunityScore = params.opportunityDimension?.percentage !== undefined ? params.opportunityDimension.percentage : 50;
+  const opportunityScore = params.opportunityDimension?.percentage !== undefined ? params.opportunityDimension.percentage : 40;
   const opportunityNote =
     params.opportunityDimension?.note ||
-    'Your responses suggest this dimension may deserve deliberate attention to strengthen your overall financial resilience.';
+    'Focusing on this pillar will dramatically increase your overall financial stability.';
 
-  const actions = params.nextActions && params.nextActions.length > 0
-    ? params.nextActions
-    : [
-        'Automate monthly savings transfers before discretionary spending.',
-        'Review your emergency buffer to ensure 3–6 months of essential liquidity.',
-        'Align investments with clear, time-horizon goals rather than short-term returns.',
-      ];
+  const actions = params.nextActions && params.nextActions.length > 0 ? params.nextActions : [
+    'Set up automated monthly savings transfers on your salary day before discretionary expenses.',
+    'Build a dedicated liquid emergency reserve equivalent to 3–6 months of living expenses.',
+    'Schedule an annual portfolio check-in to realign your asset allocation with your life milestones.',
+  ];
 
-  const waText = encodeURIComponent(
-    `Hey! I just took the Financial Ready™️ Assessment by Shree Capital to benchmark my personal finances across 5 dimensions. Check where you stand here (it's free): ${appUrl}/survey`
-  );
+  const waMessage = `How financially ready are you?\nI just took the Financial Readiness Assessment by Shree Capital to evaluate my personal finance readiness across five key dimensions.\nTake the free assessment and find out where you stand:\n${appUrl}/survey`;
+  const waText = encodeURIComponent(waMessage);
   const waUrl = `https://api.whatsapp.com/send?text=${waText}`;
 
   const liUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${appUrl}/survey`)}`;

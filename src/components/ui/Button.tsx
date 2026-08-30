@@ -4,7 +4,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost' | 'success';
+  variant?: 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost' | 'success' | 'gold' | 'navy';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -33,17 +33,21 @@ export function Button({
 
   const variantStyles = {
     primary:
-      'bg-blue-600 hover:bg-blue-700 text-white shadow-sm focus:ring-blue-500 border border-transparent',
+      'bg-[#c9a44c] hover:bg-[#b8933b] text-[#0f1e3a] font-semibold shadow-xs focus:ring-[#c9a44c] border border-transparent',
+    gold:
+      'bg-[#c9a44c] hover:bg-[#b8933b] text-[#0f1e3a] font-semibold shadow-xs focus:ring-[#c9a44c] border border-transparent',
+    navy:
+      'bg-[#1f5e8c] hover:bg-[#184d73] text-white font-medium shadow-xs focus:ring-[#1f5e8c] border border-transparent',
     secondary:
-      'bg-slate-100 hover:bg-slate-200 text-slate-800 focus:ring-slate-400 border border-slate-200',
+      'bg-[#eef2f6] hover:bg-[#e2e8f0] text-[#0f1e3a] font-medium focus:ring-[#9fb3c8] border border-[#bcccdc]',
     outline:
-      'bg-transparent hover:bg-slate-50 text-slate-700 border border-slate-300 focus:ring-blue-500',
+      'bg-transparent hover:bg-[#f8fafc] text-[#0f1e3a] border border-[#243b53] focus:ring-[#1f5e8c]',
     danger:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus:ring-rose-500 border border-transparent',
+      'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-500 border border-transparent',
     ghost:
-      'bg-transparent hover:bg-slate-100 text-slate-600 hover:text-slate-900 focus:ring-slate-300',
+      'bg-transparent hover:bg-[#eef2f6] text-[#334e68] hover:text-[#0f1e3a] focus:ring-[#9fb3c8]',
     success:
-      'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm focus:ring-emerald-500 border border-transparent',
+      'bg-[#1f5e8c] hover:bg-[#184d73] text-white shadow-xs focus:ring-[#1f5e8c] border border-transparent',
   };
 
   return (

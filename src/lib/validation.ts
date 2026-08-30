@@ -11,6 +11,12 @@ export function isValidName(name: string): boolean {
   return trimmed.length >= 2 && trimmed.length <= 100;
 }
 
+export function isValidPhone(phone: unknown): boolean {
+  if (!phone || typeof phone !== 'string') return false;
+  const digits = phone.replace(/\D/g, '');
+  return digits.length >= 10 && digits.length <= 15;
+}
+
 export function isValidAge(age: unknown): boolean {
   if (age === undefined || age === null || age === '') return false;
   const num = typeof age === 'number' ? age : parseInt(String(age), 10);
@@ -31,7 +37,7 @@ export function validateSurveySubmission(data: unknown): {
   valid: boolean;
   errors: Record<string, string>;
   data?: {
-    respondent: { name: string; email: string; age: number };
+    respondent: { name: string; email: string; phone?: string; age: number };
     answers: Record<string, string>;
   };
 } {
@@ -42,19 +48,22 @@ export function validateSurveySubmission(data: unknown): {
   }
 
   const payload = data as {
-    respondent?: { name?: string; email?: string; age?: unknown };
+    respondent?: { name?: string; email?: string; phone?: string; age?: unknown };
     answers?: Record<string, string>;
   };
 
   if (!payload.respondent || typeof payload.respondent !== 'object') {
     errors['respondent'] = 'Respondent details are required';
   } else {
-    const { name, email, age } = payload.respondent;
+    const { name, email, phone, age } = payload.respondent;
     if (!name || !isValidName(name)) {
       errors['respondent.name'] = 'Full Name is required (at least 2 characters)';
     }
     if (!email || !isValidEmail(email)) {
       errors['respondent.email'] = 'A valid email address is required';
+    }
+    if (!phone || !isValidPhone(phone)) {
+      errors['respondent.phone'] = 'A valid phone number is required (at least 10 digits)';
     }
     if (!isValidAge(age)) {
       errors['respondent.age'] = 'Please enter a valid age (10 to 120)';
@@ -80,6 +89,7 @@ export function validateSurveySubmission(data: unknown): {
       respondent: {
         name: sanitizeInput(payload.respondent!.name!),
         email: payload.respondent!.email!.trim().toLowerCase(),
+        phone: payload.respondent!.phone ? sanitizeInput(payload.respondent!.phone!) : undefined,
         age: ageNum,
       },
       answers: payload.answers!,

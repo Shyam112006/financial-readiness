@@ -126,6 +126,7 @@ export async function POST(request: NextRequest) {
       respondent: {
         name: respondent.name,
         email: respondent.email,
+        phone: respondent.phone,
         age: respondent.age,
       },
       answers: answerSnapshots,

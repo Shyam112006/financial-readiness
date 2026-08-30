@@ -11,10 +11,8 @@ import {
   Send,
   Check,
   RotateCcw,
-  ShieldCheck,
   Layers,
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { RespondentData } from './RespondentForm';
 import { IQuestion } from '@/lib/types';
 import Modal from '@/components/ui/Modal';
@@ -52,7 +50,6 @@ export function SurveyRunner({
     const sectionMap = new Map<string, IQuestion[]>();
 
     questions.forEach((q) => {
-      // Determine section from question.section, question.category, or questionNumber range
       let secName = q.section || q.category || 'General';
       if (q.questionNumber >= 1 && q.questionNumber <= 5) {
         secName = 'Section A — Money Management';
@@ -74,7 +71,6 @@ export function SurveyRunner({
 
     const list: SectionGroup[] = [];
     sectionMap.forEach((qList, name) => {
-      // Sort questions inside section by questionNumber
       qList.sort((a, b) => a.questionNumber - b.questionNumber);
       const shortName = name.replace(/^Section [A-Z] — /, '');
       list.push({
@@ -99,7 +95,7 @@ export function SurveyRunner({
         }
       }
     } catch {
-      // ignore storage access errors
+      // ignore
     }
   }, [STORAGE_KEY]);
 
@@ -108,7 +104,7 @@ export function SurveyRunner({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
     } catch {
-      // ignore storage access errors
+      // ignore
     }
   }, [answers, STORAGE_KEY]);
 
@@ -130,7 +126,6 @@ export function SurveyRunner({
   const isCurrentSectionComplete =
     currentSection && currentSectionAnsweredCount === currentSection.questions.length;
 
-  // Handle option selection
   const handleSelectOption = (question: IQuestion, optionId: string) => {
     const qKey = question._id || String(question.questionNumber);
     setAnswers((prev) => ({
@@ -161,7 +156,6 @@ export function SurveyRunner({
   };
 
   const handleNextSection = () => {
-    // Check if all questions in current section are answered
     if (!isCurrentSectionComplete) {
       const unanswered = currentSection.questions.filter((q) => {
         const key = q._id || String(q.questionNumber);
@@ -170,7 +164,6 @@ export function SurveyRunner({
       setSectionError(
         `Please answer all questions in ${currentSection.name} before proceeding (${unanswered.length} remaining).`
       );
-      // Scroll to first unanswered question
       const firstUnanswered = unanswered[0];
       if (firstUnanswered) {
         const el = document.getElementById(`question-card-${firstUnanswered.questionNumber}`);
@@ -189,7 +182,6 @@ export function SurveyRunner({
     }
   };
 
-  // Final survey submission
   const handleSubmitSurvey = async () => {
     if (answeredCount < totalQuestions) {
       setSubmitError(`Please answer all ${totalQuestions} questions across all sections before submitting.`);
@@ -216,16 +208,13 @@ export function SurveyRunner({
         throw new Error(data.message || 'Failed to submit survey. Please try again.');
       }
 
-      // Clear local draft
       try {
         localStorage.removeItem(STORAGE_KEY);
       } catch {
         // ignore
       }
 
-      // Store result in sessionStorage for instant result page rendering
       sessionStorage.setItem('survey_latest_result', JSON.stringify(data.data));
-
       router.push(`/survey/result?id=${data.data.responseId}`);
     } catch (err) {
       console.error('Submission error:', err);
@@ -240,32 +229,32 @@ export function SurveyRunner({
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Top Header & Section Navigation Stepper */}
-      <div className="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-5 space-y-4">
+      <div className="bg-[#102a43] rounded-2xl sm:rounded-3xl shadow-xl border border-[#243b53] p-4 sm:p-6 space-y-4">
         {/* Global Progress */}
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Assessment Progress
+            <span className="text-[11px] sm:text-xs font-bold text-[#9fb3c8] uppercase tracking-wider">
+              Diagnostic Progress
             </span>
-            <span className="text-xs font-semibold px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md">
+            <span className="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 bg-[#0f1e3a] text-[#c9a44c] border border-[#243b53] rounded-md">
               {answeredCount} of {totalQuestions} Answered
             </span>
           </div>
-          <div className="text-xs font-bold text-blue-600">
+          <div className="text-xs sm:text-sm font-bold text-[#c9a44c]">
             {progressPercent}% Completed
           </div>
         </div>
 
         {/* Global Progress Bar */}
-        <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+        <div className="w-full h-2.5 bg-[#0f1e3a] rounded-full overflow-hidden border border-[#243b53]">
           <div
-            className="h-full bg-linear-to-r from-blue-600 to-indigo-600 transition-all duration-300 rounded-full"
+            className="h-full bg-gradient-to-r from-[#1f5e8c] to-[#c9a44c] transition-all duration-300 rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
 
         {/* Section Tabs Stepper */}
-        <div className="pt-2 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-5 gap-2">
+        <div className="pt-2 border-t border-[#243b53] grid grid-cols-2 sm:grid-cols-5 gap-2 overflow-x-auto">
           {sections.map((sec, idx) => {
             const isCurrent = idx === currentSectionIndex;
             const secAnsCount = sec.questions.filter((q) => {
@@ -283,24 +272,24 @@ export function SurveyRunner({
                   setCurrentSectionIndex(idx);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer min-h-[64px] ${
                   isCurrent
-                    ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-100 shadow-xs'
+                    ? 'border-[#c9a44c] bg-[#c9a44c]/20 ring-2 ring-[#c9a44c]/30 shadow-md'
                     : isDone
-                    ? 'border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/50'
-                    : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
+                    ? 'border-[#1f5e8c]/50 bg-[#0f1e3a] hover:bg-[#162e4a]'
+                    : 'border-[#243b53] bg-[#0f1e3a] hover:bg-[#162e4a]'
                 }`}
               >
                 <div className="flex items-center justify-between text-[11px] font-bold mb-1">
-                  <span className={isCurrent ? 'text-blue-700' : isDone ? 'text-emerald-700' : 'text-slate-500'}>
+                  <span className={isCurrent ? 'text-[#c9a44c]' : isDone ? 'text-[#9fb3c8]' : 'text-[#627d98]'}>
                     Part {idx + 1}
                   </span>
-                  {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-[#c9a44c]" />}
                 </div>
-                <div className="text-xs font-semibold text-slate-800 truncate">
+                <div className={`text-xs font-semibold truncate ${isCurrent ? 'text-white' : 'text-[#bcccdc]'}`}>
                   {sec.shortName}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">
+                <div className="text-[10px] text-[#627d98] mt-0.5">
                   {secAnsCount}/{sec.questions.length} done
                 </div>
               </button>
@@ -309,41 +298,41 @@ export function SurveyRunner({
         </div>
       </div>
 
-      {/* Current Section Banner */}
-      <div className="bg-linear-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Current Section Banner (Deep Navy with Gold Accents) */}
+      <div className="bg-[#102a43] text-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 border-[#c9a44c] border-y border-r border-[#243b53]">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider mb-2 border border-blue-400/20">
-            <Layers className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0f1e3a] text-[#c9a44c] text-xs font-bold uppercase tracking-wider mb-2 border border-[#243b53]">
+            <Layers className="w-3.5 h-3.5 text-[#c9a44c]" />
             <span>Section {currentSectionIndex + 1} of {sections.length}</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-white">
             {currentSection.name}
           </h2>
-          <p className="text-xs text-blue-200 mt-1">
+          <p className="text-xs sm:text-sm text-[#bcccdc] mt-1">
             Answer all {currentSection.questions.length} questions in this section below.
           </p>
         </div>
 
-        <div className="text-right shrink-0 bg-white/10 px-4 py-2 rounded-xl border border-white/10 backdrop-blur-xs">
-          <span className="text-xs text-blue-200 block">Section Status</span>
-          <span className="text-base font-bold text-white">
+        <div className="text-left sm:text-right shrink-0 bg-[#0f1e3a] px-4 py-2.5 rounded-xl border border-[#243b53]">
+          <span className="text-[11px] text-[#9fb3c8] block">Section Status</span>
+          <span className="text-sm sm:text-base font-bold text-[#c9a44c]">
             {currentSectionAnsweredCount} / {currentSection.questions.length} Answered
           </span>
         </div>
       </div>
 
-      {/* Error alert banner if any */}
+      {/* Error alert banner */}
       {(sectionError || submitError) && (
-        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3 text-rose-800 text-sm">
-          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-start gap-3 text-rose-300 text-sm">
+          <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold">Attention Required</p>
-            <p className="text-rose-700 text-xs mt-0.5">{sectionError || submitError}</p>
+            <p className="font-semibold text-rose-200">Attention Required</p>
+            <p className="text-rose-300 text-xs mt-0.5">{sectionError || submitError}</p>
           </div>
         </div>
       )}
 
-      {/* Section Questions Stack (All questions in current section appear together) */}
+      {/* Section Questions Stack */}
       <div className="space-y-6">
         {currentSection.questions.map((q) => {
           const qKey = q._id || String(q.questionNumber);
@@ -353,15 +342,15 @@ export function SurveyRunner({
             <div
               key={q.questionNumber}
               id={`question-card-${q.questionNumber}`}
-              className={`bg-white rounded-2xl border-2 p-6 sm:p-8 transition-all ${
+              className={`bg-[#102a43] rounded-2xl sm:rounded-3xl border p-5 sm:p-8 transition-all ${
                 selectedOptionId
-                  ? 'border-slate-200/80 shadow-xs'
-                  : 'border-slate-200 hover:border-slate-300 shadow-sm'
+                  ? 'border-[#c9a44c]/40 shadow-lg'
+                  : 'border-[#243b53] hover:border-[#334e68] shadow-md'
               }`}
             >
               {/* Question Header */}
               <div className="flex items-center justify-between gap-4 mb-4">
-                <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md bg-slate-900 text-white">
+                <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md bg-[#0f1e3a] text-[#c9a44c] border border-[#243b53]">
                   Question {q.questionNumber}
                 </span>
 
@@ -369,7 +358,7 @@ export function SurveyRunner({
                   <button
                     type="button"
                     onClick={() => handleClearOption(q)}
-                    className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 cursor-pointer"
+                    className="text-xs text-[#9fb3c8] hover:text-[#c9a44c] flex items-center gap-1 transition-colors px-2 py-1 rounded-md hover:bg-[#0f1e3a] cursor-pointer"
                     title="Clear selection for this question"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -378,8 +367,8 @@ export function SurveyRunner({
                 )}
               </div>
 
-              {/* Question Text */}
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug mb-6">
+              {/* Question Text in Serif */}
+              <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-white leading-snug mb-6">
                 {q.questionText}
               </h3>
 
@@ -394,26 +383,26 @@ export function SurveyRunner({
                       key={option.optionId}
                       type="button"
                       onClick={() => handleSelectOption(q, option.optionId)}
-                      className={`w-full text-left p-4 sm:p-4.5 rounded-xl border-2 transition-all flex items-center justify-between group cursor-pointer ${
+                      className={`w-full text-left p-4 sm:p-4.5 rounded-xl border transition-all flex items-center justify-between group cursor-pointer min-h-[56px] ${
                         isSelected
-                          ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-2 ring-blue-100'
-                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 bg-white'
+                          ? 'border-[#c9a44c] bg-[#c9a44c]/15 shadow-md ring-1 ring-[#c9a44c]'
+                          : 'border-[#243b53] hover:border-[#9fb3c8] hover:bg-[#162e4a] bg-[#0f1e3a]'
                       }`}
                     >
                       <div className="flex items-center gap-3.5 min-w-0 pr-3">
                         <div
                           className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${
                             isSelected
-                              ? 'bg-blue-600 text-white shadow-xs'
-                              : 'bg-slate-100 text-slate-700 group-hover:bg-slate-200'
+                              ? 'bg-[#c9a44c] text-[#0f1e3a] shadow-xs'
+                              : 'bg-[#102a43] text-[#9fb3c8] border border-[#243b53] group-hover:text-white'
                           }`}
                         >
                           {letter}
                         </div>
 
                         <span
-                          className={`text-sm sm:text-base font-medium transition-colors ${
-                            isSelected ? 'text-blue-950 font-semibold' : 'text-slate-800'
+                          className={`text-sm sm:text-base transition-colors leading-relaxed ${
+                            isSelected ? 'text-white font-semibold' : 'text-[#bcccdc] group-hover:text-white'
                           }`}
                         >
                           {option.optionText}
@@ -423,8 +412,8 @@ export function SurveyRunner({
                       <div
                         className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all ${
                           isSelected
-                            ? 'border-blue-600 bg-blue-600 text-white'
-                            : 'border-slate-300 group-hover:border-slate-400 bg-transparent'
+                            ? 'border-[#c9a44c] bg-[#c9a44c] text-[#0f1e3a]'
+                            : 'border-[#243b53] group-hover:border-[#9fb3c8] bg-transparent'
                         }`}
                       >
                         {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
@@ -439,24 +428,23 @@ export function SurveyRunner({
       </div>
 
       {/* Bottom Sticky Navigation Bar */}
-      <div className="bg-white rounded-2xl shadow-md border border-slate-200/80 p-4 sm:p-5 flex items-center justify-between sticky bottom-4 z-20">
-        <Button
+      <div className="bg-[#102a43]/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#243b53] p-3.5 sm:p-5 flex items-center justify-between sticky bottom-4 z-20">
+        <button
           type="button"
-          variant="secondary"
           onClick={handlePreviousSection}
-          leftIcon={<ArrowLeft className="w-4 h-4" />}
+          className="px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#0f1e3a] hover:bg-[#162e4a] border border-[#243b53] rounded-xl transition-all flex items-center gap-1.5 cursor-pointer min-h-[42px]"
         >
-          {currentSectionIndex === 0 ? 'Edit Details' : 'Previous Section'}
-        </Button>
+          <ArrowLeft className="w-4 h-4" />
+          <span>{currentSectionIndex === 0 ? 'Edit Profile' : 'Previous'}</span>
+        </button>
 
-        <div className="text-xs text-slate-500 hidden sm:block">
-          Section {currentSectionIndex + 1} of {sections.length} &bull; Respondent: <strong className="text-slate-800">{respondent.name}</strong>
+        <div className="text-xs text-[#9fb3c8] hidden sm:block">
+          Section {currentSectionIndex + 1} of {sections.length} &bull; Participant: <strong className="text-white">{respondent.name}</strong>
         </div>
 
         {isLastSection ? (
-          <Button
+          <button
             type="button"
-            variant="success"
             onClick={() => {
               if (!isCurrentSectionComplete) {
                 setSectionError(`Please complete all questions in ${currentSection.name} before reviewing.`);
@@ -464,19 +452,20 @@ export function SurveyRunner({
               }
               setShowReviewModal(true);
             }}
-            rightIcon={<Sparkles className="w-4 h-4" />}
+            className="px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-[#0f1e3a] bg-[#c9a44c] hover:bg-[#b8933b] rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer min-h-[42px]"
           >
-            Review & Finalize
-          </Button>
+            <span>Review & Finalize</span>
+            <Sparkles className="w-4 h-4" />
+          </button>
         ) : (
-          <Button
+          <button
             type="button"
-            variant="primary"
             onClick={handleNextSection}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
+            className="px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-[#0f1e3a] bg-[#c9a44c] hover:bg-[#b8933b] rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer min-h-[42px]"
           >
-            Next Section
-          </Button>
+            <span>Next Section</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         )}
       </div>
 
@@ -484,30 +473,30 @@ export function SurveyRunner({
       <Modal
         isOpen={showReviewModal}
         onClose={() => setShowReviewModal(false)}
-        title="Review & Calculate Index"
+        title="Review & Calculate Readiness Score"
         description="Verify your assessment summary before submitting your responses to the scoring engine."
         maxWidth="lg"
       >
-        <div className="space-y-4">
+        <div className="space-y-4 text-slate-800">
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-600">Respondent:</span>
+            <div className="flex items-center justify-between text-xs sm:text-sm">
+              <span className="text-slate-500">Participant:</span>
               <span className="font-bold text-slate-900">{respondent.name}</span>
             </div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-600">Email for Certificate:</span>
+            <div className="flex items-center justify-between text-xs sm:text-sm">
+              <span className="text-slate-500">Email for Certificate:</span>
               <span className="font-bold text-slate-900 font-mono">{respondent.email}</span>
             </div>
-            <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-200">
-              <span className="text-slate-600">Total Questions Completed:</span>
-              <span className="font-extrabold text-emerald-600">
+            <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-slate-200">
+              <span className="text-slate-500">Total Questions Completed:</span>
+              <span className="font-extrabold text-[#1f5e8c]">
                 {answeredCount} of {totalQuestions} Questions
               </span>
             </div>
           </div>
 
           {/* Section Summary Pills */}
-          <div className="space-y-1.5 pt-1">
+          <div className="space-y-1.5 pt-1 max-h-60 overflow-y-auto">
             <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sections Summary</h5>
             {sections.map((sec, idx) => {
               const secAns = sec.questions.filter((q) => answers[q._id || String(q.questionNumber)]).length;
@@ -518,10 +507,10 @@ export function SurveyRunner({
                   key={sec.id}
                   className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
                 >
-                  <span className="font-medium text-slate-800">
+                  <span className="font-medium text-slate-900 truncate pr-2">
                     {idx + 1}. {sec.name}
                   </span>
-                  <span className={`font-bold ${complete ? 'text-emerald-600' : 'text-rose-600'}`}>
+                  <span className={`font-bold shrink-0 ${complete ? 'text-emerald-600' : 'text-rose-600'}`}>
                     {secAns}/{sec.questions.length}
                   </span>
                 </div>
@@ -529,23 +518,24 @@ export function SurveyRunner({
             })}
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-            <Button
-              variant="outline"
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+            <button
+              type="button"
               onClick={() => setShowReviewModal(false)}
               disabled={isSubmitting}
+              className="px-4 py-2 text-xs sm:text-sm font-medium text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
             >
-              Back to Survey
-            </Button>
-            <Button
-              variant="primary"
+              Back to Questions
+            </button>
+            <button
+              type="button"
               onClick={handleSubmitSurvey}
-              isLoading={isSubmitting}
               disabled={answeredCount < totalQuestions || isSubmitting}
-              rightIcon={<Send className="w-4 h-4" />}
+              className="px-5 py-2 text-xs sm:text-sm font-semibold text-[#0f1e3a] bg-[#c9a44c] hover:bg-[#b8933b] rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
-              Submit & Calculate Index
-            </Button>
+              <span>{isSubmitting ? 'Calculating...' : 'Submit & Generate Report'}</span>
+              <Send className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </Modal>
