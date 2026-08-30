@@ -294,11 +294,13 @@ function ResultContent() {
             </p>
             <div className="pt-2">
               <a
-                href="mailto:contact@shree-capital.com?subject=Requesting%20Financial%20Clarity%20Conversation"
+                href="https://calendly.com/arun_agrawal"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block"
               >
-                <button className="px-5 py-2.5 text-xs sm:text-sm font-semibold text-[#0f1e3a] bg-[#c9a44c] hover:bg-[#b8933b] rounded-md transition-all flex items-center gap-1.5 cursor-pointer">
-                  <span>Schedule Clarity Conversation</span>
+                <button className="px-5 py-2.5 text-xs sm:text-sm font-semibold text-[#0f1e3a] bg-[#c9a44c] hover:bg-[#b8933b] rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-xs hover:shadow-md">
+                  <span>Request a Financial Clarity Conversation</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </a>

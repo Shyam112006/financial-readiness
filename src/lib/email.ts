@@ -45,32 +45,11 @@ export interface EmailDispatchResult {
 }
 
 /**
- * Builds the official Shree Capital — Financial Ready HTML Email Template
+ * Builds the official Shree Capital — Financial Readiness Assessment HTML Email Template
  */
 export function generateSurveyResultEmailHtml(params: SendSurveyResultEmailParams): string {
   const appUrl = process.env.APP_URL || 'http://localhost:3000';
   const level = params.readinessLevel || params.interpretation?.level || 'Financial Starter';
-  const quote =
-    params.interpretation?.motivationalQuote ||
-    'The score is not a judgement. It is simply your starting point.';
-
-  const strongestName = params.strongestDimension?.name || 'Money Management';
-  const strongestScore = params.strongestDimension?.percentage !== undefined ? params.strongestDimension.percentage : 80;
-  const strongestNote =
-    params.strongestDimension?.note ||
-    'Your habits and approach in this area provide a strong anchor for long-term growth.';
-
-  const opportunityName = params.opportunityDimension?.name || 'Risk Protection';
-  const opportunityScore = params.opportunityDimension?.percentage !== undefined ? params.opportunityDimension.percentage : 40;
-  const opportunityNote =
-    params.opportunityDimension?.note ||
-    'Focusing on this pillar will dramatically increase your overall financial stability.';
-
-  const actions = params.nextActions && params.nextActions.length > 0 ? params.nextActions : [
-    'Set up automated monthly savings transfers on your salary day before discretionary expenses.',
-    'Build a dedicated liquid emergency reserve equivalent to 3–6 months of living expenses.',
-    'Schedule an annual portfolio check-in to realign your asset allocation with your life milestones.',
-  ];
 
   const waMessage = `How financially ready are you?\nI just took the Financial Readiness Assessment by Shree Capital to evaluate my personal finance readiness across five key dimensions.\nTake the free assessment and find out where you stand:\n${appUrl}/survey`;
   const waText = encodeURIComponent(waMessage);
@@ -84,255 +63,396 @@ export function generateSurveyResultEmailHtml(params: SendSurveyResultEmailParam
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Financial Readiness Score is here</title>
+  <title>Your Financial Readiness Assessment Report — Shree Capital</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f1f5f9;
+      background-color: #0f1e3a;
       margin: 0;
       padding: 24px 12px;
-      color: #1e293b;
+      color: #334e68;
+      -webkit-font-smoothing: antialiased;
     }
-    .container {
-      max-width: 600px;
+    .wrapper {
+      max-width: 620px;
       margin: 0 auto;
       background: #ffffff;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      border: 1px solid #e2e8f0;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      border: 1px solid #eef2f6;
     }
     .header {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      padding: 36px 32px;
+      background-color: #0f1e3a;
+      padding: 36px 30px;
       text-align: center;
-      color: #ffffff;
+      border-bottom: 4px solid #c9a44c;
     }
-    .header-sub {
-      color: #93c5fd;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-    .content {
-      padding: 32px 28px;
-    }
-    .score-banner {
-      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-      border: 2px solid #86efac;
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-      margin: 24px 0;
-    }
-    .score-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #166534;
-    }
-    .score-number {
-      font-size: 52px;
-      font-weight: 900;
-      color: #15803d;
-      line-height: 1;
-      margin: 8px 0;
-    }
-    .score-tier {
+    .header-tag {
       display: inline-block;
-      background: #dcfce7;
-      color: #166534;
+      font-size: 11px;
       font-weight: 800;
-      font-size: 14px;
+      color: #c9a44c;
+      background-color: #102a43;
+      border: 1px solid #243b53;
       padding: 4px 14px;
       border-radius: 20px;
-      border: 1px solid #86efac;
-      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
     }
-    .insight-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+    .header-title {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin: 6px 0 2px 0;
+      text-transform: uppercase;
+    }
+    .header-sub {
+      color: #bcccdc;
+      font-size: 14px;
+      font-style: italic;
+      margin: 4px 0 0 0;
+    }
+    .content {
+      padding: 36px 32px;
+    }
+    .greeting {
+      font-size: 16px;
+      color: #0f1e3a;
+      line-height: 1.6;
+      margin-top: 0;
+    }
+    .body-text {
+      font-size: 14px;
+      color: #334e68;
+      line-height: 1.65;
+      margin: 14px 0;
+    }
+    .quote-box {
+      margin: 22px 0;
+      padding: 14px 18px;
+      background-color: #f8fafc;
+      border-left: 3px solid #c9a44c;
+      font-style: italic;
+      color: #243b53;
+      font-size: 13.5px;
+      border-radius: 0 8px 8px 0;
+    }
+    .score-card {
+      background-color: #fdf8ee;
+      border: 2px solid #c9a44c;
+      border-radius: 16px;
+      padding: 26px 20px;
+      text-align: center;
+      margin: 28px 0;
+    }
+    .score-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: #0f1e3a;
+    }
+    .score-main {
+      font-size: 52px;
+      font-weight: 900;
+      color: #0f1e3a;
+      line-height: 1;
+      margin: 10px 0 4px 0;
+    }
+    .score-total {
+      font-size: 20px;
+      color: #627d98;
+      font-weight: 700;
+    }
+    .score-badge {
+      display: inline-block;
+      background-color: #c9a44c;
+      color: #0f1e3a;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 18px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+    .score-desc {
+      font-size: 12.5px;
+      color: #334e68;
+      line-height: 1.55;
+      margin: 14px 10px 0 10px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f1e3a;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 32px 0 16px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #eef2f6;
+    }
+    .dimension-card {
+      background-color: #f8fafc;
+      border: 1px solid #eef2f6;
       border-radius: 12px;
-      padding: 16px;
+      padding: 14px 16px;
       margin-bottom: 12px;
     }
-    .action-pill {
-      background: #eff6ff;
-      border-left: 4px solid #3b82f6;
-      padding: 12px 16px;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: #1e3a8a;
+    .dimension-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f1e3a;
+      margin-bottom: 4px;
+    }
+    .dimension-desc {
+      font-size: 12.5px;
+      color: #627d98;
       line-height: 1.5;
+      margin: 0;
     }
     .cta-box {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      border: 1px solid #cbd5e1;
-      border-radius: 14px;
+      background-color: #0f1e3a;
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      margin: 32px 0;
+      border-left: 4px solid #c9a44c;
+    }
+    .cta-title {
+      color: #ffffff;
+      margin: 0 0 8px 0;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .cta-text {
+      color: #bcccdc;
+      font-size: 13px;
+      margin: 0 0 12px 0;
+      line-height: 1.55;
+    }
+    .cta-highlight {
+      color: #c9a44c;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin: 0 0 18px 0;
+    }
+    .btn-gold {
+      display: inline-block;
+      background-color: #c9a44c;
+      color: #0f1e3a !important;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 13px 26px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .share-box {
+      background-color: #f8fafc;
+      border: 1px solid #eef2f6;
+      border-radius: 16px;
       padding: 24px;
       text-align: center;
       margin: 28px 0;
     }
-    .button-primary {
-      display: inline-block;
-      background: #1e3a8a;
-      color: #ffffff !important;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      padding: 12px 24px;
-      border-radius: 8px;
-      margin-top: 12px;
+    .share-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f1e3a;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 0 0 8px 0;
     }
-    .button-share {
+    .share-desc {
+      font-size: 13px;
+      color: #334e68;
+      line-height: 1.55;
+      margin: 0 0 18px 0;
+    }
+    .btn-share {
       display: inline-block;
-      padding: 8px 14px;
-      font-size: 12px;
-      font-weight: 700;
       text-decoration: none;
-      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 10px 20px;
+      border-radius: 8px;
       margin: 4px;
     }
     .footer {
-      background: #0f172a;
+      background-color: #f8fafc;
       padding: 28px 24px;
       text-align: center;
-      font-size: 11px;
-      color: #94a3b8;
+      font-size: 11.5px;
+      color: #627d98;
       line-height: 1.6;
+      border-top: 1px solid #eef2f6;
+    }
+    .footer-brand {
+      font-weight: 800;
+      color: #0f1e3a;
+      font-size: 12.5px;
+      letter-spacing: 1px;
+      margin: 0 0 4px 0;
+    }
+    .footer-links {
+      color: #1f5e8c;
+      margin: 0 0 12px 0;
+    }
+    .footer-links a {
+      color: #1f5e8c;
+      text-decoration: none;
+    }
+    .footer-disclaimer {
+      font-size: 10.5px;
+      color: #9fb3c8;
+      margin: 0;
+      line-height: 1.45;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <div class="header-sub">Shree Capital • Wealth Management</div>
-      <h1>FINANCIAL READY™️</h1>
-      <p style="margin: 6px 0 0 0; color: #cbd5e1; font-size: 13px;">How financially ready are you?</p>
-    </div>
+<body style="margin: 0; padding: 24px 10px; background-color: #0f1e3a;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center">
+        <div class="wrapper">
+          <!-- Header -->
+          <div class="header">
+            <div class="header-tag">SHREE CAPITAL</div>
+            <div class="header-title">FINANCIAL READINESS ASSESSMENT</div>
+          </div>
 
-    <!-- Content -->
-    <div class="content">
-      <p style="font-size: 15px; line-height: 1.6; margin-top: 0;">
-        Dear <strong>${escapeHtml(params.toName)}</strong>,
-      </p>
-      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
-        Thank you for taking the time to complete the <strong>Financial Ready™️ Assessment</strong>. Proactively evaluating your financial foundation is one of the most positive decisions you can make for your future.
-      </p>
+          <!-- Content Body -->
+          <div class="content">
+            <p class="greeting">
+              Dear <strong>${escapeHtml(params.toName)}</strong>,
+            </p>
 
-      <blockquote style="margin: 16px 0; padding: 12px 16px; background: #f8fafc; border-left: 3px solid #64748b; font-style: italic; color: #475569; font-size: 13px;">
-        &ldquo;The score is not a judgement. It is a starting point.&rdquo;
-      </blockquote>
+            <p class="body-text">
+              Thank you for taking the time to complete the Financial Readiness Assessment.
+            </p>
 
-      <!-- Score Banner -->
-      <div class="score-banner">
-        <div class="score-label">Your Overall Financial Readiness Score</div>
-        <div class="score-number">${params.indexValue} <span style="font-size: 20px; color: #166534; font-weight: 600;">/ 100</span></div>
-        <div class="score-tier">${escapeHtml(level)}</div>
-        <p style="font-size: 12px; color: #166534; margin: 10px 0 0 0; font-weight: 500;">
-          ${escapeHtml(quote)}
-        </p>
-      </div>
+            <p class="body-text">
+              Your assessment provides a snapshot of your personal finance readiness across five key dimensions and highlights areas that may benefit from greater awareness, planning, or improvement.
+            </p>
 
-      <!-- Key Insights -->
-      <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-top: 24px; margin-bottom: 12px;">
-        Key Observations
-      </h3>
+            <div class="quote-box">
+              &ldquo;The score is not a judgement. It is a starting point.&rdquo;
+            </div>
 
-      <div class="insight-card" style="border-left: 4px solid #10b981;">
-        <div style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase;">★ Your Current Strength</div>
-        <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 2px;">
-          ${escapeHtml(strongestName)} (${strongestScore}/100)
+            <!-- Score Banner -->
+            <div class="score-card">
+              <div class="score-header">YOUR OVERALL FINANCIAL READINESS SCORE</div>
+              <div class="score-main">
+                ${params.indexValue} <span class="score-total">/ 100</span>
+              </div>
+              <div>
+                <span class="score-badge">${escapeHtml(level)}</span>
+              </div>
+              <p class="score-desc">
+                Your score represents your current level of financial readiness based on your responses. Use it as a starting point to understand your strengths and identify areas where you can build a stronger financial foundation.
+              </p>
+            </div>
+
+            <!-- 5 Dimensions of Financial Readiness -->
+            <div class="section-title">YOUR FIVE DIMENSIONS OF FINANCIAL READINESS</div>
+
+            <div class="dimension-card">
+              <div class="dimension-name">Money Management</div>
+              <p class="dimension-desc">
+                Understanding how effectively you manage income, expenses, savings, and cash flow.
+              </p>
+            </div>
+
+            <div class="dimension-card">
+              <div class="dimension-name">Emergency Preparedness</div>
+              <p class="dimension-desc">
+                Your ability to handle unexpected financial situations without disrupting your long-term plans.
+              </p>
+            </div>
+
+            <div class="dimension-card">
+              <div class="dimension-name">Investing</div>
+              <p class="dimension-desc">
+                Your awareness and approach toward building wealth through appropriate investment strategies.
+              </p>
+            </div>
+
+            <div class="dimension-card">
+              <div class="dimension-name">Risk Protection</div>
+              <p class="dimension-desc">
+                Your preparedness to protect yourself and your finances against significant financial risks.
+              </p>
+            </div>
+
+            <div class="dimension-card">
+              <div class="dimension-name">Long-Term Planning</div>
+              <p class="dimension-desc">
+                Your readiness to plan for major financial goals and build sustainable long-term financial security.
+              </p>
+            </div>
+
+            <!-- What Next? Section -->
+            <div class="cta-box">
+              <div class="cta-title">WHAT NEXT?</div>
+              <p class="cta-text">
+                Your score is only the beginning. The most valuable part of the assessment is understanding where you stand and what you can improve.
+              </p>
+              <p class="cta-text">
+                If you would like to discuss your results or explore ways to strengthen your financial readiness, you can request a complimentary Financial Clarity Conversation with our advisory team.
+              </p>
+              <div class="cta-highlight">
+                100% Educational &amp; Exploratory &bull; No Obligation
+              </div>
+              <div>
+                <a href="https://calendly.com/arun_agrawal" target="_blank" class="btn-gold">
+                  Request a Financial Clarity Conversation
+                </a>
+              </div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="share-box">
+              <div class="share-title">MAKE FINANCIAL READINESS A CONVERSATION</div>
+              <p class="share-desc">
+                Personal finance is rarely discussed openly. Encourage better financial awareness by sharing the assessment with your friends, family, or colleagues.
+              </p>
+              <div>
+                <a href="${waUrl}" target="_blank" class="btn-share" style="background-color: #25d366; color: #ffffff;">
+                  Share on WhatsApp
+                </a>
+                <a href="${liUrl}" target="_blank" class="btn-share" style="background-color: #0077b5; color: #ffffff;">
+                  Share on LinkedIn
+                </a>
+              </div>
+            </div>
+
+            <p style="font-size: 14px; color: #334e68; line-height: 1.6; margin-top: 28px;">
+              Warm regards,<br><br>
+              <strong>Team Shree Capital</strong>
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <div class="footer-brand">SHREE CAPITAL</div>
+            <div class="footer-links">
+              <a href="mailto:contact@shree-capital.com">contact@shree-capital.com</a> &bull; <a href="https://www.shree-capital.com" target="_blank">www.shree-capital.com</a>
+            </div>
+            <p class="footer-disclaimer">
+              Disclaimer: This assessment is an educational and exploratory tool. Scores and insights are indicative and do not constitute financial, investment, legal, or tax advice.
+            </p>
+          </div>
         </div>
-        <p style="font-size: 12px; color: #475569; margin: 6px 0 0 0; line-height: 1.4;">
-          ${escapeHtml(strongestNote)}
-        </p>
-      </div>
-
-      <div class="insight-card" style="border-left: 4px solid #f59e0b;">
-        <div style="font-size: 11px; font-weight: 700; color: #b45309; text-transform: uppercase;">✦ Your Biggest Opportunity</div>
-        <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 2px;">
-          ${escapeHtml(opportunityName)} (${opportunityScore}/100)
-        </div>
-        <p style="font-size: 12px; color: #475569; margin: 6px 0 0 0; line-height: 1.4;">
-          ${escapeHtml(opportunityNote)}
-        </p>
-      </div>
-
-      <!-- 3 Practical Next Steps -->
-      <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-top: 24px; margin-bottom: 12px;">
-        3 Practical Next Steps
-      </h3>
-
-      ${actions
-        .map(
-          (action, i) => `
-      <div class="action-pill">
-        <strong>${i + 1}.</strong> ${escapeHtml(action)}
-      </div>`
-        )
-        .join('')}
-
-      <!-- Attached PDF Notice -->
-      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 16px; margin-top: 20px;">
-        <div style="font-weight: 700; color: #1e40af; font-size: 13px;">📎 Attached: Your Full Financial Readiness Report & Certificate</div>
-        <p style="font-size: 12px; color: #3b82f6; margin: 4px 0 0 0; line-height: 1.4;">
-          We have attached your official PDF report containing your complete 5-dimension scorecard and question-by-question response audit.
-        </p>
-      </div>
-
-      <!-- Challenge 5 Section -->
-      <div style="margin: 28px 0; padding: 20px; background: #fdf4ff; border: 1px solid #f0abfc; border-radius: 14px; text-align: center;">
-        <h4 style="margin: 0 0 6px 0; color: #86198f; font-size: 14px; font-weight: 800;">Challenge 5 People in Your Circle</h4>
-        <p style="font-size: 12px; color: #701a75; margin: 0 0 14px 0; line-height: 1.5;">
-          Personal finance is rarely discussed openly. Encourage healthy financial habits by challenging five friends or colleagues to discover their score!
-        </p>
-        <a href="${waUrl}" target="_blank" class="button-share" style="background: #25d366; color: #ffffff;">Share on WhatsApp</a>
-        <a href="${liUrl}" target="_blank" class="button-share" style="background: #0077b5; color: #ffffff;">Share on LinkedIn</a>
-      </div>
-
-      <!-- Financial Clarity Conversation CTA -->
-      <div class="cta-box">
-        <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800; color: #0f172a;">
-          Want to Improve Your Financial Readiness?
-        </h4>
-        <p style="font-size: 12px; color: #475569; margin: 0 0 10px 0; line-height: 1.5;">
-          If you would like to discuss your results or explore how to strengthen your five dimensions, we invite you to have a complimentary <strong>Financial Clarity Conversation</strong> with our advisory team.
-        </p>
-        <p style="font-size: 11px; color: #64748b; margin: 0 0 14px 0;">
-          <em>• 100% Educational & Exploratory &bull; Zero Sales Pressure &bull; No Obligation</em>
-        </p>
-        <a href="mailto:contact@shree-capital.com?subject=Requesting%20Financial%20Clarity%20Conversation" class="button-primary">
-          Request a Financial Clarity Conversation
-        </a>
-      </div>
-
-      <p style="font-size: 13px; color: #475569; line-height: 1.6; margin-top: 24px;">
-        Warm regards,<br>
-        <strong>The Advisory Team</strong><br>
-      </p>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <p style="margin: 0 0 8px 0; font-weight: 700; color: #e2e8f0;">SHREE CAPITAL</p>
-      <p style="margin: 0 0 12px 0;">contact@shree-capital.com | www.shree-capital.com</p>
-      <p style="margin: 0; font-size: 10px; color: #64748b; line-height: 1.4;">
-        Disclaimer: This assessment is an educational tool. Scores and insights are indicative and do not constitute financial, investment, legal, or tax advice.
-      </p>
-    </div>
-  </div>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
   `.trim();
@@ -344,28 +464,78 @@ export function generateSurveyResultEmailHtml(params: SendSurveyResultEmailParam
 export function generateSurveyResultEmailText(params: SendSurveyResultEmailParams): string {
   const level = params.readinessLevel || params.interpretation?.level || 'Financial Starter';
   return `
-SHREE CAPITAL — FINANCIAL READY™ ASSESSMENT REPORT
+SHREE CAPITAL
+FINANCIAL READINESS ASSESSMENT
+
 How financially ready are you?
+
 
 Dear ${params.toName},
 
-Thank you for completing the Financial Ready™ Assessment.
-"The score is not a judgement. It is a starting point."
+Thank you for taking the time to complete the Financial Readiness Assessment.
 
-YOUR SCORE: ${params.indexValue} / 100
-READINESS LEVEL: ${level}
+Your assessment provides a snapshot of your personal finance readiness across five key dimensions and highlights areas that may benefit from greater awareness, planning, or improvement.
 
-STRENGTH: ${params.strongestDimension?.name || 'Money Management'} (${params.strongestDimension?.percentage || 80}/100)
-OPPORTUNITY: ${params.opportunityDimension?.name || 'Risk Protection'} (${params.opportunityDimension?.percentage || 50}/100)
+“The score is not a judgement. It is a starting point.”
 
-Please find your official PDF Assessment Report and Certificate attached to this email.
 
-Optional: To schedule a complimentary, no-obligation Financial Clarity Conversation with our advisory team, contact us at contact@shree-capital.com.
+YOUR OVERALL FINANCIAL READINESS SCORE
+
+${params.indexValue} / 100
+
+${level}
+
+Your score represents your current level of financial readiness based on your responses. Use it as a starting point to understand your strengths and identify areas where you can build a stronger financial foundation.
+
+
+YOUR FIVE DIMENSIONS OF FINANCIAL READINESS
+
+Money Management
+Understanding how effectively you manage income, expenses, savings, and cash flow.
+
+Emergency Preparedness
+Your ability to handle unexpected financial situations without disrupting your long-term plans.
+
+Investing
+Your awareness and approach toward building wealth through appropriate investment strategies.
+
+Risk Protection
+Your preparedness to protect yourself and your finances against significant financial risks.
+
+Long-Term Planning
+Your readiness to plan for major financial goals and build sustainable long-term financial security.
+
+
+WHAT NEXT?
+
+Your score is only the beginning. The most valuable part of the assessment is understanding where you stand and what you can improve.
+
+If you would like to discuss your results or explore ways to strengthen your financial readiness, you can request a complimentary Financial Clarity Conversation with our advisory team.
+
+100% Educational & Exploratory · Zero Sales Pressure · No Obligation
+
+[ Request a Financial Clarity Conversation: https://calendly.com/arun_agrawal ]
+
+
+MAKE FINANCIAL READINESS A CONVERSATION
+
+Personal finance is rarely discussed openly. Encourage better financial awareness by sharing the assessment with your friends, family, or colleagues.
+
+[ Share on WhatsApp: https://api.whatsapp.com/send?text=${encodeURIComponent(`How financially ready are you?\nI just took the Financial Readiness Assessment by Shree Capital to evaluate my personal finance readiness across five key dimensions.\nTake the free assessment and find out where you stand:\n${process.env.APP_URL || 'http://localhost:3000'}/survey`)} ]
+
+[ Share on LinkedIn: https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${process.env.APP_URL || 'http://localhost:3000'}/survey`)} ]
+
 
 Warm regards,
-The Advisory Team
-Shree Capital
-contact@shree-capital.com
+
+Team Shree Capital
+
+
+SHREE CAPITAL
+
+contact@shree-capital.com · www.shree-capital.com
+
+Disclaimer: This assessment is an educational and exploratory tool. Scores and insights are indicative and do not constitute financial, investment, legal, or tax advice.
   `.trim();
 }
 
