@@ -234,3 +234,4 @@ export class CustomWeightedCalculator implements ScoreCalculator {
 1. **Server-Side Scoring Guard**: The backend never accepts raw score values from the browser. It cross-references option IDs against the database.
 2. **Encrypted Authentication**: Admin sessions use HTTP-only, SameSite, Secure JWT cookies with bcrypt-hashed passwords.
 3. **Data Immutability**: Survey submissions store full snapshots of questions, selected option texts, and scores. Modifying questions later will never corrupt historical respondent records.
+# financial-readiness
